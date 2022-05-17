@@ -6,10 +6,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>画板</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-
+    <div id="canvas"></div>
+    <script>
+        canvas.onclick = (e) => {
+            // console.log(e);
+            // console.log 调试大法
+            console.log(e.clientX)
+            console.log(e.clientY)
+            let div = document.createElement('div')
+            // document = 文档，当前网页 create 创建 Element 标签
+            // 这句话的意思就是让文档创建一个元素
+            div.style.position = 'absolute'
+            // 让div的内联属性的position是absolute
+            div.style.left = e.clientX + 'px'
+            div.style.top = e.clientY + 'px'
+            // div.style.border = '1px solid red'
+            div.style.width = '6px'
+            div.style.height = '6px'
+            div.style.marginLeft = '-3px'
+            div.style.marginTop = '-3px'
+            div.style.borderRadius = '50%'
+            div.style.backgroundColor = 'black'
+            canvas.appendChild(div)
+            // append 添加 child 子元素
+        }
+    </script>
 </body>
 
 </html>
