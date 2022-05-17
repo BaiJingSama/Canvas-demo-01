@@ -4,7 +4,18 @@
     box-sizing: border-box;
 }
 
+.content {
+    position: absolute;
+    touch-action: none;
+}
+
 #canvas{
-    border: 1px solid red;
+    /* border: 1px solid red; */
     display: block;
+    position: absolute;
+    
+}
+
+body {
+    overflow: hidden;
 }

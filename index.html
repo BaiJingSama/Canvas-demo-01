@@ -10,7 +10,9 @@
 </head>
 
 <body>
-    <canvas id="canvas"></canvas>
+    <div class="content">
+        <canvas id="canvas"></canvas>
+    </div>
     <script>
         // 画线
 
@@ -19,38 +21,83 @@
         canvas.width = document.documentElement.clientWidth
         canvas.height = document.documentElement.clientHeight
 
+        document.body.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            console.log(e);
+        }, {
+            passive: false
+        });
+
+
+
         var ctx = canvas.getContext("2d");
-
-
-        ctx.fillStyle = "black";
-        ctx.strokeStyle = "none";
 
         let start = false;
 
-        canvas.onmousedown = () => {
-            start = true
+        ctx.fillStyle = "black";
+        ctx.strokeStyle = "none";
+        ctx.lineWidth = 10;
+        // stroke 的宽度
+        ctx.lineCap = "round"
+        // 每个线的末尾是圆的还是方的
+
+
+        function drawLine(x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.stroke();
+            ctx.fill()
         }
 
-        canvas.onmousemove = (e) => {
-            if (start === true) {
-                // console.log(e.clientX);
-                // console.log(e.clientY);
-                // ctx.fillRect(e.clientX - 5, e.clientY - 5, 10, 10);
-                ctx.beginPath();
-                ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
-                ctx.stroke();
-                ctx.fill();
+        // drawLine(0, 0, 500, 500)
 
-            } else {
-                console.log('什么都不做');
+
+
+
+        var isTouchDevice = 'ontouchstart' in document.documentElement;
+        console.log(isTouchDevice);
+        // 检测页面是否支持触摸屏 就是检测是否为手机或平板
+        // 手机平板设备 // true
+        // 电脑 // false    
+        let last = []
+        if (isTouchDevice) {
+            // console.log('目前什么也没做');
+            canvas.ontouchstart = (e) => {
+                let x = e.touches[0].clientX;
+                let y = e.touches[0].clientY;
+                last = [x, y]
+            }
+            canvas.ontouchmove = (e) => {
+                let x = e.touches[0].clientX;
+                let y = e.touches[0].clientY;
+                // console.log(x, y);
+                drawLine(last[0], last[1], x, y)
+                last = [x, y]
+            }
+        } else {
+            canvas.onmousedown = (e) => {
+                start = true
+                last = [e.clientX, e.clientY]
             }
 
-
-            canvas.onmouseup = () => {
-                start = false
+            canvas.onmousemove = (e) => {
+                if (start === true) {
+                    // ctx.beginPath();
+                    // ctx.arc(e.clientX, e.clientY, 10, 0, 2 * Math.PI);
+                    // ctx.stroke();
+                    // ctx.fill();
+                    drawLine(last[0], last[1], e.clientX, e.clientY)
+                    last = [e.clientX, e.clientY]
+                } else {
+                    // console.log('什么都不做');
+                }
+                // 当用户移动鼠标时， 浏览器会调用 canvas.onmousemove
+                // canvas.onmousemove(事件相关信息)
+                canvas.onmouseup = () => {
+                    start = false
+                }
             }
-
-
         }
     </script>
 </body>
